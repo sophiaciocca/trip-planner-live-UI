@@ -4,12 +4,13 @@ const db = require('../models');
 const Hotel = db.model('hotel');
 const Restaurant = db.model('restaurant');
 const Activity = db.model('activity');
+const Place = db.model('place');
 
 router.get('/', function (req, res, next) {
   Promise.all([
-    Hotel.findAll(),
-    Restaurant.findAll(),
-    Activity.findAll()
+    Hotel.findAll({ include: [ Place ] }),
+    Restaurant.findAll({ include: [ Place ] }),
+    Activity.findAll({ include: [ Place ] })
   ])
   .then(function (allThings) {
     const hotels = allThings[0];

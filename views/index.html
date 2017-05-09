@@ -16,29 +16,29 @@
           <div>
             <h4>Hotels</h4>
             <select data-type="hotel" id="hotel-choices">
-                {% for hotel in hotels %}
+                <!-- {% for hotel in hotels %}
                   <option value = "{{hotel.name}}">{{hotel.name}}</option>
-                  {% endfor %}
+                {% endfor %} -->
             </select>
-            <button data-action="add" class="btn btn-primary btn-circle pull-right">+</button>
+            <button id="hotel-add-button" data-action="add" class="btn btn-primary btn-circle pull-right">+</button>
           </div>
           <div>
             <h4>Restaurants</h4>
             <select data-type="restaurant" id="restaurant-choices">
-              {% for restaurant in restaurants %}
+              <!-- {% for restaurant in restaurants %}
                 <option value = "{{restaurant.name}}">{{restaurant.name}}</option>
-              {% endfor %}
+              {% endfor %} -->
             </select>
-            <button data-action="add" class="btn btn-primary btn-circle pull-right">+</button>
+            <button id="restaurant-add-button" data-action="add" class="btn btn-primary btn-circle pull-right">+</button>
           </div>
           <div>
             <h4>Activities</h4>
             <select data-type="activity" id="activity-choices">
-              {% for activity in activities %}
+              <!-- {% for activity in activities %}
                 <option value = "{{activity.name}}">{{activity.name}}</option>
-              {% endfor %}
+              {% endfor %} -->
             </select>
-            <button data-action="add" class="btn btn-primary btn-circle pull-right">+</button>
+            <button id="activity-add-button" data-action="add" class="btn btn-primary btn-circle pull-right">+</button>
           </div>
         </div>
       </div>
@@ -62,7 +62,7 @@
         <div class="panel-body" id="itinerary">
           <div>
             <h4>My Hotel</h4>
-            <ul class="list-group">
+            <ul id="my-hotel-list" class="list-group">
               <!--<div class="itinerary-item">
                 <span class="title">Andaz Wall Street</span>
                 <button class="btn btn-xs btn-danger remove btn-circle">x</button>
@@ -71,7 +71,7 @@
           </div>
           <div>
             <h4>My Restaurants</h4>
-            <ul class="list-group">
+            <ul id="my-restaurant-list" class="list-group">
               <!--<div class="itinerary-item">
                 <span class="title">Bouley</span>
                 <button class="btn btn-xs btn-danger remove btn-circle">x</button>
@@ -80,7 +80,7 @@
           </div>
           <div>
             <h4>My Activities</h4>
-            <ul class="list-group">
+            <ul id="my-activity-list" class="list-group">
               <!--<div class="itinerary-item">
                 <span class="title">Mahayana Buddhist Temple Association</span>
                 <button class="btn btn-xs btn-danger remove btn-circle">x</button>
@@ -94,10 +94,65 @@
 </div>
 
 <script>
-  var hotels = {{ hotels | dump | safe }};
-  var restaurants = {{ restaurants | dump | safe }};
-  var activities = {{ activities | dump | safe }};
-
+  var hotelsDump = {{ hotels | dump | safe }};
+  var restaurantsDump = {{ restaurants | dump | safe }};
+  var activitiesDump = {{ activities | dump | safe }};
+  console.log(hotelsDump);
   //now we have an array of hotel objects called hotels, and the same for restaurants and activities (available on the front end!)
+
+  for(var i = 0; i < hotelsDump.length; i++) {
+    var hotel = hotelsDump[i];
+    var elementToInsert = '<option value = "' + hotel.name + '" data-lat=' + hotel.place.location[0] + ' data-long=' + hotel.place.location[1] + '>' + hotel.name + '</option>';
+    $("#hotel-choices").append(elementToInsert);
+
+  }
+
+  for(var i = 0; i < restaurantsDump.length; i++) {
+    var restaurant = restaurantsDump[i];
+    var elementToInsert = '<option value = "' + restaurant.name + '" data-lat=' + restaurant.place.location[0] + ' data-long=' + restaurant.place.location[1] + '>' + restaurant.name + '</option>';
+    $("#restaurant-choices").append(elementToInsert);
+
+  }
+
+  for(var i = 0; i < activitiesDump.length; i++) {
+    var activity = activitiesDump[i];
+    var elementToInsert = '<option value = "' + activity.name + '" data-lat=' + activity.place.location[0] + ' data-long=' + activity.place.location[1] + '>' + activity.name + '</option>';
+    $("#activity-choices").append(elementToInsert);
+
+  }
+
+  //moving slelected hotel to day list and updaing map: 
+  $('#hotel-add-button').on('click', function() {
+    var selectedHotelName = $('#hotel-choices').find(":selected").text();
+    var selectedHotelLat = $('#hotel-choices').find(":selected").data("lat");
+    var selectedHotelLong = $('#hotel-choices').find(":selected").data("long");
+    //console.log(selectedHotelLat, ",", selectedHotelLong);
+    var elementToInsert = '<div class="itinerary-item"><span class="title">' + selectedHotelName + '</span><button class="btn btn-xs btn-danger remove btn-circle">x</button></div>';
+    $("#my-hotel-list").append(elementToInsert);
+    drawMarker('hotel', [selectedHotelLat, selectedHotelLong]);
+  });
+
+  $('#restaurant-add-button').on('click', function() {
+    var selectedRestaurantName = $('#restaurant-choices').find(":selected").text();
+    var selectedRestaurantLat = $('#restaurant-choices').find(":selected").data("lat");
+    var selectedRestaurantLong = $('#restaurant-choices').find(":selected").data("long");
+    //console.log(selectedrestaurantLat, ",", selectedrestaurantLong);
+    var elementToInsert = '<div class="itinerary-item"><span class="title">' + selectedRestaurantName + '</span><button class="btn btn-xs btn-danger remove btn-circle">x</button></div>';
+    $("#my-restaurant-list").append(elementToInsert);
+    drawMarker('restaurant', [selectedRestaurantLat, selectedRestaurantLong]);
+  });
+
+
+  $('#activity-add-button').on('click', function() {
+    var selectedActivityName = $('#activity-choices').find(":selected").text();
+    var selectedActivityLat = $('#activity-choices').find(":selected").data("lat");
+    var selectedActivityLong = $('#activity-choices').find(":selected").data("long");
+    //console.log(selectedactivityLat, ",", selectedactivityLong);
+    var elementToInsert = '<div class="itinerary-item"><span class="title">' + selectedActivityName + '</span><button class="btn btn-xs btn-danger remove btn-circle">x</button></div>';
+    $("#my-activity-list").append(elementToInsert);
+    drawMarker('activity', [selectedActivityLat, selectedActivityLong]);
+  });
+
+
 </script>
 {% endblock %}
