@@ -1,0 +1,24 @@
+{
+  "name": "tripplanner",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "nodemon -e js,html,scss app.js",
+    "build-css": "node-sass -w -r assets/stylesheets -o public/stylesheets",
+    "seed": "node seed.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.16.0",
+    "bootstrap": "^3.3.7",
+    "express": "^4.14.0",
+    "jquery": "2.1.4",
+    "morgan": "^1.7.0",
+    "nunjucks": "^3.0.0",
+    "pg": "^6.1.2",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^3.30.0"
+  },
+  "devDependencies": {
+    "node-sass": "^4.3.0",
+    "nodemon": "^1.11.0"
+  }
+}
