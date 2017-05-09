@@ -63,28 +63,19 @@
           <div>
             <h4>My Hotel</h4>
             <ul id="my-hotel-list" class="list-group">
-              <!--<div class="itinerary-item">
-                <span class="title">Andaz Wall Street</span>
-                <button class="btn btn-xs btn-danger remove btn-circle">x</button>
-              </div>-->
+              <!--Current Day Itinerary added here by jQuery-->
             </ul>
           </div>
           <div>
             <h4>My Restaurants</h4>
             <ul id="my-restaurant-list" class="list-group">
-              <!--<div class="itinerary-item">
-                <span class="title">Bouley</span>
-                <button class="btn btn-xs btn-danger remove btn-circle">x</button>
-              </div>-->
+              <!--Current Day Itinerary added here by jQuery-->
             </ul>
           </div>
           <div>
             <h4>My Activities</h4>
             <ul id="my-activity-list" class="list-group">
-              <!--<div class="itinerary-item">
-                <span class="title">Mahayana Buddhist Temple Association</span>
-                <button class="btn btn-xs btn-danger remove btn-circle">x</button>
-              </div>-->
+              <!--Current Day Itinerary added here by jQuery-->
             </ul>
           </div>
         </div>
@@ -97,9 +88,9 @@
   var hotelsDump = {{ hotels | dump | safe }};
   var restaurantsDump = {{ restaurants | dump | safe }};
   var activitiesDump = {{ activities | dump | safe }};
-  console.log(hotelsDump);
   //now we have an array of hotel objects called hotels, and the same for restaurants and activities (available on the front end!)
 
+  //3 for loops to populate the dropdown lists from our arrays: 
   for(var i = 0; i < hotelsDump.length; i++) {
     var hotel = hotelsDump[i];
     var elementToInsert = '<option value = "' + hotel.name + '" data-lat=' + hotel.place.location[0] + ' data-long=' + hotel.place.location[1] + '>' + hotel.name + '</option>';
@@ -121,22 +112,23 @@
 
   }
 
-  //moving slelected hotel to day list and updaing map: 
+  //moving selected hotel/restaurant/activities to Day itinerarise and updating map:
+
   $('#hotel-add-button').on('click', function() {
     var selectedHotelName = $('#hotel-choices').find(":selected").text();
     var selectedHotelLat = $('#hotel-choices').find(":selected").data("lat");
     var selectedHotelLong = $('#hotel-choices').find(":selected").data("long");
-    //console.log(selectedHotelLat, ",", selectedHotelLong);
-    var elementToInsert = '<div class="itinerary-item"><span class="title">' + selectedHotelName + '</span><button class="btn btn-xs btn-danger remove btn-circle">x</button></div>';
-    $("#my-hotel-list").append(elementToInsert);
     drawMarker('hotel', [selectedHotelLat, selectedHotelLong]);
+    console.log(markersObj);
+    var elementToInsert = '<div class="itinerary-item" data-mapid=' + id + '><span class="title">' + selectedHotelName + '</span><button class="btn btn-xs btn-danger remove btn-circle">x</button></div>';
+    $("#my-hotel-list").append(elementToInsert);
+    id++;
   });
 
   $('#restaurant-add-button').on('click', function() {
     var selectedRestaurantName = $('#restaurant-choices').find(":selected").text();
     var selectedRestaurantLat = $('#restaurant-choices').find(":selected").data("lat");
     var selectedRestaurantLong = $('#restaurant-choices').find(":selected").data("long");
-    //console.log(selectedrestaurantLat, ",", selectedrestaurantLong);
     var elementToInsert = '<div class="itinerary-item"><span class="title">' + selectedRestaurantName + '</span><button class="btn btn-xs btn-danger remove btn-circle">x</button></div>';
     $("#my-restaurant-list").append(elementToInsert);
     drawMarker('restaurant', [selectedRestaurantLat, selectedRestaurantLong]);
@@ -147,11 +139,17 @@
     var selectedActivityName = $('#activity-choices').find(":selected").text();
     var selectedActivityLat = $('#activity-choices').find(":selected").data("lat");
     var selectedActivityLong = $('#activity-choices').find(":selected").data("long");
-    //console.log(selectedactivityLat, ",", selectedactivityLong);
     var elementToInsert = '<div class="itinerary-item"><span class="title">' + selectedActivityName + '</span><button class="btn btn-xs btn-danger remove btn-circle">x</button></div>';
     $("#my-activity-list").append(elementToInsert);
     drawMarker('activity', [selectedActivityLat, selectedActivityLong]);
   });
+
+  //removing events from Day itinerary
+  $('.list-group').on('click', '.itinerary-item button', function() {
+    var potentialMapId = $(this).parent().data("mapid");
+    deleteMarker(potentialMapId);
+    $(this).parent().remove();
+  })
 
 
 </script>

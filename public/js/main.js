@@ -6,6 +6,9 @@ const iconURLs = {
     activity: '/images/star-3.png'
   };
 
+var id = 1;
+var markersObj = {};
+
 function drawMarker (type, coords) {
     const latLng = new google.maps.LatLng(coords[0], coords[1]);
     const iconURL = iconURLs[type];
@@ -13,8 +16,15 @@ function drawMarker (type, coords) {
       icon: iconURL,
       position: latLng
     });
+    markersObj[id] = marker;
+    console.log("this is id: ", id);
     marker.setMap(currentMap);
   }
+
+function deleteMarker (id) {
+  marker = markersObj[id];
+  marker.setMap(null);
+}
 
 $(function initializeMap () {
 
