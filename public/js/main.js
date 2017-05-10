@@ -17,13 +17,19 @@ function drawMarker (type, coords) {
       position: latLng
     });
     markersObj[id] = marker;
-    console.log("this is id: ", id);
+    //console.log("this is id: ", id);
     marker.setMap(currentMap);
   }
 
 function deleteMarker (id) {
   marker = markersObj[id];
   marker.setMap(null);
+}
+
+function deleteAllMarkers () {
+  for (marker in markersObj) {
+    markersObj[marker].setMap(null);
+  }
 }
 
 $(function initializeMap () {
@@ -77,24 +83,12 @@ $(function initializeMap () {
     styles: styleArr
   });
 
-  // const iconURLs = {
-  //   hotel: '/images/lodging_0star.png',
-  //   restaurant: '/images/restaurant.png',
-  //   activity: '/images/star-3.png'
-  // };
-
-  // function drawMarker (type, coords) {
-  //   const latLng = new google.maps.LatLng(coords[0], coords[1]);
-  //   const iconURL = iconURLs[type];
-  //   const marker = new google.maps.Marker({
-  //     icon: iconURL,
-  //     position: latLng
-  //   });
-  //   marker.setMap(currentMap);
-  // }
-
-  // drawMarker('hotel', [40.705137, -74.007624]);
-  // drawMarker('restaurant', [40.705137, -74.013940]);
-  // drawMarker('activity', [40.716291, -73.995315]);
-
 });
+
+function Day(idNum) {
+  this.dayId = idNum,
+  this.hotel = {},
+  this.restaurants = [],
+  this.activities = []
+}
+
