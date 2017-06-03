@@ -89,7 +89,7 @@
   var currentDay = arrayForDays[0];
   dayCounter++;
 
-
+  //DUMP SCRIPTS TO INITIALLY GET THE DATA FROM THE DATABASE
   var hotelsDump = {{ hotels | dump | safe }};
   var restaurantsDump = {{ restaurants | dump | safe }};
   var activitiesDump = {{ activities | dump | safe }};
@@ -117,8 +117,7 @@
 
   }
 
-  //moving selected hotel/restaurant/activities to Day itinerarise and updating map:
-
+  //when user selects a hotel, add it to the Day Panel and the map:
   $('#hotel-add-button').on('click', function() {
     var selectedHotelName = $('#hotel-choices').find(":selected").text();
     var selectedHotelLat = $('#hotel-choices').find(":selected").data("lat");
@@ -135,6 +134,7 @@
     id++;
   });
 
+  //when user selects a restaurant, add it to the Day Panel and the map:
   $('#restaurant-add-button').on('click', function() {
     var selectedRestaurantName = $('#restaurant-choices').find(":selected").text();
     var selectedRestaurantLat = $('#restaurant-choices').find(":selected").data("lat");
@@ -151,7 +151,7 @@
     id++;
   });
 
-
+  //when user selects an activity, add it to the Day Panel and the map:
   $('#activity-add-button').on('click', function() {
     var selectedActivityName = $('#activity-choices').find(":selected").text();
     var selectedActivityLat = $('#activity-choices').find(":selected").data("lat");
@@ -196,7 +196,7 @@
     //update title text
     $('#day-title-text').text('Day ' + dayNum);
 
-    //empty out slections from previous day:
+    //empty out selections from previous day:
     $('#my-hotel-list').empty();
     deleteAllMarkers();
   })
